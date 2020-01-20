@@ -4,30 +4,38 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * PersistentStateComponent keeps project config values.
- * Similar notion of 'preference' in Android
+ * Similar to the notion of 'preference' in Android
  */
 @State(
-        name="BlackPycharmConfig",
-        storages = {
-                @Storage("BlackPycharmConfig.xml")}
+        name = "BlackPycharmConfig",
+        storages = {@Storage("BlackPycharmConfig.xml")}
 )
 public class BlackPycharmConfig implements PersistentStateComponent<BlackPycharmConfig> {
 
     /* NOTE: member should be "public" to be saved in xml */
     /* add_executable(): exe name */
-    static final String EXECUTABLE_NAME_FILENAME = "/usr/local/bin/black";
+    static final String EXECUTABLE_NAME_FILENAME = "/usr/local/black";
     public static final String DEFAULT_EXECUTABLE_NAME = EXECUTABLE_NAME_FILENAME;
     public String executableName = DEFAULT_EXECUTABLE_NAME;  // persistent member should be public
 
-    BlackPycharmConfig() { }
+    static final String MAX_LINE_LENGTH = "88";
+    public static final String DEFAULT_MAX_LINE_LENGTH = MAX_LINE_LENGTH;
+    public String maxLineLength = DEFAULT_MAX_LINE_LENGTH;  // persistent member should be public
+
+    BlackPycharmConfig() {
+
+    }
+
 
     String getExecutableName() {
         if (executableName == null) {
             // Error, it should not happen
+            assert false;
             executableName = "";
         }
         return executableName;
@@ -37,6 +45,14 @@ public class BlackPycharmConfig implements PersistentStateComponent<BlackPycharm
         this.executableName = executableName;
     }
 
+    public String getMaxLineLength() {
+        return maxLineLength;
+    }
+
+    void setMaxLineLength(String maxLineLength) {
+        this.maxLineLength = maxLineLength;
+    }
+
     @Nullable
     @Override
     public BlackPycharmConfig getState() {
@@ -44,13 +60,12 @@ public class BlackPycharmConfig implements PersistentStateComponent<BlackPycharm
     }
 
     @Override
-    public void loadState(BlackPycharmConfig blackPycharmConfig) {
+    public void loadState(@NotNull BlackPycharmConfig blackPycharmConfig) {
         XmlSerializerUtil.copyBean(blackPycharmConfig, this);
     }
 
     @Nullable
     public static BlackPycharmConfig getInstance(Project project) {
-        BlackPycharmConfig sfec = ServiceManager.getService(project, BlackPycharmConfig.class);
-        return sfec;
+        return ServiceManager.getService(project, BlackPycharmConfig.class);
     }
 }
