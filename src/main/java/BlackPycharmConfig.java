@@ -19,7 +19,7 @@ public class BlackPycharmConfig implements PersistentStateComponent<BlackPycharm
 
     /* NOTE: member should be "public" to be saved in xml */
     /* add_executable(): exe name */
-    static final String EXECUTABLE_NAME_FILENAME = "/usr/local/black";
+    static final String EXECUTABLE_NAME_FILENAME = "/usr/bin/black";
     public static final String DEFAULT_EXECUTABLE_NAME = EXECUTABLE_NAME_FILENAME;
     public String executableName = DEFAULT_EXECUTABLE_NAME;  // persistent member should be public
 
